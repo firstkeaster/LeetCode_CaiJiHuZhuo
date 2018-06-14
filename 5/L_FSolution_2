@@ -1,0 +1,39 @@
+class Solution:
+    def longestPalindrome(self, s):
+        #Solution 2
+        #都是抄的
+        #insert # to s
+        ori_len = len(s)
+        token = '#'
+        ss = s
+        for i in range(ori_len,0,-1):
+            ss = ss[:-i]+token+ss[-i:]
+        ss = ss+token
+        #print(ss)
+        new_len = len(ss)
+        P = [0]*new_len
+        C = 0
+        R = 0
+        for i in range(new_len-1):
+            i_mir = 2*C - i
+            if R > i:
+                if R-i > P[i_mir]:
+                    P[i] = P[i_mir]
+                else:
+                    P[i] = R-i
+            else:
+                P[i] = 0
+            while i-P[i]-1 >= 0 and i+P[i]+1 < new_len:
+                if ss[i-P[i]-1] == ss[i+P[i]+1]:
+                    P[i] += 1
+                else:
+                    break
+            
+            if i+P[i] > R:
+                R = i+P[i]
+                C = i
+            #print(P[i])
+        #return the list
+        max_len = max(P)
+        max_posi = P.index(max(P))
+        return(s[int((max_posi-max_len)/2):int((max_posi+max_len)/2)])
